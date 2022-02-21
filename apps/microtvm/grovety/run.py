@@ -108,7 +108,8 @@ if __name__ == "__main__":
 
     generated_include_path = workspace_dir / "include"
     os.makedirs(generated_include_path, exist_ok=True)
-    generate_c_interface_header(lowered.libmod_name, [input_tensor], ["output"], [], 0, generated_include_path)
+    generate_c_interface_header(lowered.libmod_name, [input_tensor], ["output"], [], [], 0, generated_include_path)
+#    generate_c_interface_header(lowered.libmod_name, [input_tensor], ["output"], generated_include_path)
     create_header_file(generated_include_path, input, output)
 
     # build the project
