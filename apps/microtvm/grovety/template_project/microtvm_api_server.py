@@ -41,7 +41,6 @@ import serial.tools.list_ports
 import yaml
 
 from tvm.micro.project_api import server
-from tvm.contrib.allhw.ci_api_server import AllHWCIAPIHandlerImpl
 
 
 _LOG = logging.getLogger(__name__)
@@ -329,6 +328,7 @@ class Handler(server.ProjectAPIHandler):
     def _is_allhw_ci(self):
         if Handler.ALLHW_CI:
             if self._ci_handler is None:
+                from ci_api_server import AllHWCIAPIHandlerImpl
                 self._ci_handler = AllHWCIAPIHandlerImpl()
             return True
         return False
@@ -423,6 +423,8 @@ class Handler(server.ProjectAPIHandler):
         # Copy ourselves to the generated project. TVM may perform further build steps on the generated project
         # by launching the copy.
         shutil.copy2(__file__, project_dir / os.path.basename(__file__))
+        # Copy All-HW CI support module to the generated project.
+        shutil.copy2(API_SERVER_DIR / "ci_api_server.py", project_dir)
 
         # Place Model Library Format tarball in the special location, which this script uses to decide
         # whether it's being invoked in a template or generated project.

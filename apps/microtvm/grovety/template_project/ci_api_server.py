@@ -1,4 +1,4 @@
-"""
+"""Implementation of (a part of) ProjectAPIHandler using All-HW CI system to flash and run projects.
 Currently the All-Hardware CI system supports obly "batch" processing: a task is created
 with a binary image and an input data file; the image is flashed and run; input data are
 put into the board's UART, and output is read from that UART. The output is returned as a
