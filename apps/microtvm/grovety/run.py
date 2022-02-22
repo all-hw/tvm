@@ -31,7 +31,7 @@ if __name__ == "__main__":
     parser.add_argument("--log-level", type=str, choices=["DEBUG", "INFO"], default="INFO", help="Log level")
     parser.add_argument("--verbose", action='store_true')
     parser.add_argument("--skip-flash", action='store_true', help="Do not flash the MCU after the build")
-    parser.add_argument("--benchmark", action="store_true", help="Enable per-op benchmarking")
+#    parser.add_argument("--benchmark", action="store_true", help="Enable per-op benchmarking")
 
     args = parser.parse_args()
     print(args)
@@ -86,8 +86,7 @@ if __name__ == "__main__":
         "west_cmd": "west",
         "verbose": args.verbose,
         "zephyr_board": platform["board"],
-        "benchmark": args.benchmark,
-        "task_timeout": 60
+#        "benchmark": args.benchmark,
     }
 
     # generate workspace
@@ -120,6 +119,14 @@ if __name__ == "__main__":
 
     # flash to the MCU
     project.flash()
+
+    ci_options = {
+        "ci_rate": 115200,
+        "ci_timeout": 30,
+        "ci_log": "DEBUG"
+    }
+
+    project.options = ci_options
 
     # communicate with the board
     with project.transport() as transport:

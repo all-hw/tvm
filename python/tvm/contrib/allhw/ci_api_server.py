@@ -37,8 +37,8 @@ class AllHWCIAPIHandlerImpl:
         self.api_key = "85282cff-fc94-4ed1-8633-6c74637e95e0"
         self.task_timeout = 20
         self.rate = 115200
-        self.log = 0
-        self.options = None
+        self.log = "0"
+        #self.options = None
 
         self._set_options(options)
 
@@ -53,18 +53,18 @@ class AllHWCIAPIHandlerImpl:
         if options is None:
             return
 
-        self.options = options
+        #self.options = options
 
-        if not options.get("url") is None:
-            self.url = options["url"]
-        if not options.get("api_key") is None:
-            self.api_key = options["api_key"]
-        if not options.get("task_timeout") is None:
-            self.task_timeout = options["task_timeout"]
-        if not options.get("rate") is None:
-            self.rate = options["rate"]
-        if not options.get("log") is None:
-            self.log = options["log"]
+        if not options.get("ci_url") is None:
+            self.url = options["ci_url"]
+        if not options.get("ci_api_key") is None:
+            self.api_key = options["ci_api_key"]
+        if not options.get("ci_timeout") is None:
+            self.task_timeout = options["ci_timeout"]
+        if not options.get("ci_rate") is None:
+            self.rate = options["ci_rate"]
+        if not options.get("ci_log") is None:
+            self.log = options["ci_log"]
 
     def flash(self, options: dict):
         """Program the project onto the device.
@@ -226,7 +226,7 @@ class AllHWCIAPIHandlerImpl:
 
         if not self.task_id is None:
             self.close_transport()
-            self.open_transport(self.options)
+            self.open_transport({})      # using options set earlier
 
         # data to input file
         fp = tempfile.TemporaryFile()

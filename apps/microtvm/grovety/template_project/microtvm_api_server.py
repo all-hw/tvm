@@ -218,22 +218,23 @@ if IS_TEMPLATE:
         if d.is_dir():
             PROJECT_TYPES.append(d.name)
 
+ZEPHYR_BASE = os.getenv("ZEPHYR_BASE")
 
 PROJECT_OPTIONS = [
     server.ProjectOption(
         "extra_files",
-        optional=["build"],
+        optional=["generate_project"],
         type="string",
         help="If given, during generate_project, uncompress the tarball at this path into the project dir",
     ),
     server.ProjectOption(
         "gdbserver_port", help=("If given, port number to use when running the local gdbserver"),
-        optional=["build"],
+        optional=["open_transport"],
         type="string",
     ),
     server.ProjectOption(
         "nrfjprog_snr",
-        optional=["build"],
+        optional=["open_transport"],
         type="string",
         help=(
             "When used with nRF targets, serial # of the " "attached board to use, from nrfjprog"
@@ -241,13 +242,13 @@ PROJECT_OPTIONS = [
     ),
     server.ProjectOption(
         "openocd_serial",
-        optional=["build"],
+        optional=["open_transport"],
         type="string",
         help=("When used with OpenOCD targets, serial # of the " "attached board to use"),
     ),
     server.ProjectOption(
         "project_type",
-        optional=["build"],
+        optional=["generate_project"],
         type="string",
         help="Type of project to generate.",
         choices=tuple(PROJECT_TYPES),
@@ -269,27 +270,55 @@ PROJECT_OPTIONS = [
     ),
     server.ProjectOption(
         "zephyr_base",
-        optional=["build"],
+        required=(["generate_project", "open_transport"] if not ZEPHYR_BASE else None),
+        optional=(["generate_project", "open_transport", "build"] if ZEPHYR_BASE else ["build"]),
+        default=ZEPHYR_BASE,
         type="string",
         help="Path to the zephyr base directory."
     ),
     server.ProjectOption(
         "zephyr_board",
-        optional=["build"],
+        required=["generate_project", "build", "flush", "open_transport"],
         type="string",
         help="Name of the Zephyr board to build for"
     ),
+#    server.ProjectOption(
+#        "benchmark",
+#        optional=["generate_project", "open_transport"],
+#        type="string",
+#        help="Enable per-op benchmarking"
+#    ),
     server.ProjectOption(
-        "benchmark",
-        optional=["build"],
-        type="string",
-        help="Unknown parameter"
+        "ci_timeout",
+        optional=["flash", "open_transport"],
+        type="integer",
+        help="Timeout (in seconds) for the CI task execution (to run firmware on the board)"
     ),
     server.ProjectOption(
-        "task_timeout",
-        optional=["build"],
+        "ci_rate",
+        optional=["flash","open_transport"],
         type="integer",
-        help="Timeout for the CI task execution (to run firmware on the board)"
+        help="Baud rate for the UART used as CI task input/output"
+    ),
+    server.ProjectOption(
+        "ci_log",
+        optional=["flash","open_transport"],
+        choices=("0", "DEBUG"),
+        type="string",
+        help="CI task logging level"
+    ),
+    server.ProjectOption(
+        "ci_url",
+        optional=["flash","open_transport"],
+        type="string",
+        default="https://cloud.all-hw.com/ci/usertask",
+        help="Base URL for the HTTP requests to CI server"
+    ),
+    server.ProjectOption(
+        "ci_api_key",
+        optional=["flash","open_transport"],
+        type="string",
+        help="The key giving access to CI server services"
     ),
 ]
 
