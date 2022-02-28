@@ -24,9 +24,9 @@ However, the default CI options necessary to run the example successfully are ha
 
 The demo script must be called from the TVM root folder like this:
 
-python apps/microtvm/grovety/run.py --platform=f746_disco --model=<model>
+python apps/microtvm/grovety/run.py --platform=f746_disco --model="model"
 
-where <model> can take values "cifar10", "mnist8", and "synth".
+where "model" can take values "cifar10", "mnist8", and "synth".
 
 This script does the following:
 
